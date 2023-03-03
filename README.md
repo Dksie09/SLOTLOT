@@ -1,4 +1,4 @@
-# trial_all
+# SLOTLOT
 
 A new Flutter project.
 
