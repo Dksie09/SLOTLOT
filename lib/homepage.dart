@@ -1,21 +1,39 @@
 import 'package:flutter/material.dart';
 import 'crashed.dart';
+import 'dart:math';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   //const ({Key? key}) : super(key: key);
+  // int x = 0;
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  Random random = Random();
+  int x = 0;
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          title: Text(
-            'HOME',
-            style: TextStyle(color: Colors.white),
-          ),
+          title: x == 0
+              ? Text(
+                  'Your position is $x th',
+                  style: TextStyle(color: Colors.white),
+                )
+              : Text(
+                  'Fuck you',
+                  style: TextStyle(color: Colors.white),
+                ),
           actions: [
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                x = random.nextInt(10);
+                setState(() {});
+                print(x);
+              },
               icon: Icon(
                 Icons.list,
                 color: Colors.white,
@@ -61,6 +79,7 @@ class HomePage extends StatelessWidget {
                           ),
                           Expanded(
                             child: TextField(
+                              keyboardType: TextInputType.name,
                               style: TextStyle(
                                 fontSize: 16,
                                 fontFamily: 'LexendDeca',
@@ -112,6 +131,7 @@ class HomePage extends StatelessWidget {
                                         child: AspectRatio(
                                           aspectRatio: 487 / 451,
                                           child: Container(
+                                            // boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 10);],
                                             decoration: BoxDecoration(
                                               image: DecorationImage(
                                                 fit: BoxFit.fitWidth,

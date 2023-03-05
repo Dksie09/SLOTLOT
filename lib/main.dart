@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'name.dart';
+import 'signin.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,6 +26,7 @@ class HomePage extends StatelessWidget {
         // ),
         body: SafeArea(
           child: Column(
+            // mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               Image(
                 image: AssetImage('images/lot01.png'),
@@ -56,39 +58,52 @@ class HomePage extends StatelessWidget {
                             fontFamily: 'Pacifico'),
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(40.0),
+                        padding:
+                            const EdgeInsets.fromLTRB(40.0, 40.0, 40.0, 60.0),
                         child: Text(
                           'A parking experience like never before',
                           style: TextStyle(color: Colors.white70),
                         ),
                       ),
                       MaterialButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => NameScreen(),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => SignIn(),
+                              ),
+                            );
+                          },
+                          child: Text(
+                            ' Get Started  → ',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 17.0,
+                              fontWeight: FontWeight.bold,
                             ),
-                          );
-                        },
-                        child: Text(
-                          ' Get Started  → ',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 17.0,
-                            fontWeight: FontWeight.bold,
                           ),
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                          side: BorderSide(color: Colors.black, width: 1.0),
-                        ),
-                        color: Colors.white,
-                        textColor: Colors.black,
-                        padding: EdgeInsets.symmetric(
-                            vertical: 16.0, horizontal: 10.0),
-                        // minWidth: double.infinity,
-                      )
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            side: BorderSide(color: Colors.black, width: 1.0),
+                          ),
+                          color: Colors.white,
+                          textColor: Colors.black,
+                          padding: EdgeInsets.fromLTRB(10, 16, 10, 16)
+                          // minWidth: double.infinity,
+                          ),
+                      TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => NameScreen(),
+                              ),
+                            );
+                          },
+                          child: Text(
+                            'Already have an account?Sign in',
+                            style: TextStyle(color: Colors.blueGrey),
+                          ))
                     ], //
                   ),
                 ),
