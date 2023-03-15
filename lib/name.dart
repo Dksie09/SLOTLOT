@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'homepage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:modal_progress_hud/modal_progress_hud.dart';
 
 class NameScreen extends StatefulWidget {
   const NameScreen({Key? key}) : super(key: key);
@@ -9,7 +11,9 @@ class NameScreen extends StatefulWidget {
 }
 
 class _NameScreenState extends State<NameScreen> {
-  String x = "";
+  final _auth = FirebaseAuth.instance;
+  String email = "";
+  String password = "";
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -32,7 +36,7 @@ class _NameScreenState extends State<NameScreen> {
                 Padding(
                   padding: const EdgeInsets.only(top: 20.0),
                   child: Text(
-                    'Welcome $x',
+                    'Welcome',
                     style: TextStyle(
                         fontFamily: 'Pacifico',
                         fontSize: 40,
@@ -59,12 +63,12 @@ class _NameScreenState extends State<NameScreen> {
                         Padding(
                           padding: const EdgeInsets.all(5.0),
                           child: Text(
-                              'Username                                                        ',
+                              'Email                                                          ',
                               style: TextStyle(
                                   color: Colors.white70, fontSize: 15)),
                         ),
                         TextFormField(
-                          keyboardType: TextInputType.name,
+                          keyboardType: TextInputType.emailAddress,
                           style: TextStyle(fontSize: 18, color: Colors.white70),
                           decoration: InputDecoration(
                             // border: InputBorder.none,
@@ -80,13 +84,12 @@ class _NameScreenState extends State<NameScreen> {
                             ),
                             prefixIcon: Icon(Icons.account_circle,
                                 color: Colors.grey.shade900),
-                            hintText: "PeterParker69",
+                            hintText: "PeterParker69@gmail.com",
                             hintStyle: TextStyle(
                                 fontSize: 18.0, color: Colors.grey.shade900),
                           ),
                           onChanged: (value) {
-                            x = value;
-                            setState(() {});
+                            email = value;
                           },
                         ),
                       ],
@@ -132,6 +135,9 @@ class _NameScreenState extends State<NameScreen> {
                             // hintStyle: TextStyle(
                             //     fontSize: 16.0, color: Colors.grey.shade900),
                           ),
+                          onChanged: (value) {
+                            password = value;
+                          },
                         ),
                       ],
                     ),
@@ -140,13 +146,35 @@ class _NameScreenState extends State<NameScreen> {
                 Padding(
                   padding: const EdgeInsets.only(top: 50),
                   child: MaterialButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => HomePage(),
-                        ),
-                      );
+                    onPressed: () async {
+                      try {
+                        final user = await _auth.signInWithEmailAndPassword(
+                            email: email, password: password);
+                        if (user != null) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => HomePage(),
+                            ),
+                          );
+                        }
+                      } catch (e) {
+                        print(e);
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text('Error'),
+                            content: Text(
+                                'Incorrect credentials. Please try again.'),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(context),
+                                child: Text('OK'),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
                     },
                     child: Text(
                       ' LOG IN ',

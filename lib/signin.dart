@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'homepage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:modal_progress_hud/modal_progress_hud.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({Key? key}) : super(key: key);
@@ -9,6 +12,10 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
+  final _auth = FirebaseAuth.instance;
+  String email = "";
+  String password = "";
+  String plate = "";
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -58,12 +65,12 @@ class _SignInState extends State<SignIn> {
                         Padding(
                           padding: const EdgeInsets.all(5.0),
                           child: Text(
-                              'Username                                                       ',
+                              'Email                                                                ',
                               style: TextStyle(
                                   color: Colors.white70, fontSize: 15)),
                         ),
                         TextFormField(
-                          keyboardType: TextInputType.name,
+                          keyboardType: TextInputType.emailAddress,
                           style: TextStyle(fontSize: 18, color: Colors.white70),
                           decoration: InputDecoration(
                             // border: InputBorder.none,
@@ -79,10 +86,13 @@ class _SignInState extends State<SignIn> {
                             ),
                             // prefixIcon: Icon(Icons.account_circle,
                             //     color: Colors.grey.shade900),
-                            hintText: "PeterParker69",
+                            hintText: "PeterParker69@gmail.com",
                             hintStyle: TextStyle(
                                 fontSize: 18.0, color: Colors.grey.shade900),
                           ),
+                          onChanged: (value) {
+                            email = value;
+                          },
                         ),
                       ],
                     ),
@@ -124,6 +134,9 @@ class _SignInState extends State<SignIn> {
                             hintStyle: TextStyle(
                                 fontSize: 16.0, color: Colors.grey.shade900),
                           ),
+                          onChanged: (value) {
+                            plate = value;
+                          },
                         ),
                       ],
                     ),
@@ -166,6 +179,9 @@ class _SignInState extends State<SignIn> {
                             // hintStyle: TextStyle(
                             //     fontSize: 16.0, color: Colors.grey.shade900),
                           ),
+                          onChanged: (value) {
+                            password = value;
+                          },
                         ),
                       ],
                     ),
@@ -174,13 +190,28 @@ class _SignInState extends State<SignIn> {
                 Padding(
                   padding: const EdgeInsets.only(top: 50),
                   child: MaterialButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => HomePage(),
-                        ),
-                      );
+                    onPressed: () async {
+                      try {
+                        final newUser =
+                            await _auth.createUserWithEmailAndPassword(
+                                email: email, password: password);
+                        if (newUser != null) {
+                          final User? user = FirebaseAuth.instance.currentUser;
+                          final String? uid = user?.uid;
+                          await FirebaseFirestore.instance
+                              .collection('users')
+                              .doc(uid)
+                              .set({'numberPlate': plate, 'email': email});
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => HomePage(),
+                            ),
+                          );
+                        }
+                      } catch (e) {
+                        print("--------------------------\n$e");
+                      }
                     },
                     child: Text(
                       ' SIGN IN ',
@@ -207,5 +238,6 @@ class _SignInState extends State<SignIn> {
         )),
       ),
     );
+    // );
   }
 }
