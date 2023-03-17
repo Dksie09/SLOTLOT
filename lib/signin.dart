@@ -201,7 +201,11 @@ class _SignInState extends State<SignIn> {
                           await FirebaseFirestore.instance
                               .collection('users')
                               .doc(uid)
-                              .set({'numberPlate': plate, 'email': email});
+                              .set({
+                            'numberPlate': plate,
+                            'email': email,
+                            'entry': false
+                          });
                           Navigator.push(
                             context,
                             MaterialPageRoute(

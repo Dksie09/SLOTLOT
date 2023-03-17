@@ -52,6 +52,45 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  void setupPresenceListener() async {
+    final FirebaseFirestore _db = FirebaseFirestore.instance;
+    final user = await _auth.currentUser;
+    loggedInUser = user;
+    print(loggedInUser?.email);
+
+    final String? uid = user?.uid;
+
+    _db.collection('users').doc(uid).snapshots().listen((docSnapshot) {
+      if (docSnapshot.exists) {
+        final bool isPresent = docSnapshot.get('entry');
+        if (isPresent) {
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text('Attention'),
+              content: Text('Your entry has been detected'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () => Navigator.pop(context, 'Not me!'),
+                  child: const Text('Not me!'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context, 'Approve');
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => CrashedPage()),
+                    );
+                  },
+                  child: const Text('Approve'),
+                ),
+              ],
+            ),
+          );
+        }
+      }
+    });
+  }
   // @override
   // void initState() {
   //   super.initState();
@@ -63,6 +102,7 @@ class _HomePageState extends State<HomePage> {
     // TODO: implement initState
     super.initState();
     getCurrentUser();
+    setupPresenceListener();
   }
 
   @override
