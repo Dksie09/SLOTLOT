@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'crashed.dart';
+import 'route.dart';
 import 'dart:math';
 import 'main.dart';
 import 'package:url_launcher/link.dart';
@@ -24,6 +25,7 @@ class _HomePageState extends State<HomePage> {
 
   User? loggedInUser;
   late String carNumber = "";
+  late bool isPresent = false;
 
   void getCurrentUser() async {
     try {
@@ -62,7 +64,7 @@ class _HomePageState extends State<HomePage> {
 
     _db.collection('users').doc(uid).snapshots().listen((docSnapshot) {
       if (docSnapshot.exists) {
-        final bool isPresent = docSnapshot.get('entry');
+        isPresent = docSnapshot.get('entry');
         if (isPresent) {
           showDialog(
             context: context,
@@ -79,7 +81,7 @@ class _HomePageState extends State<HomePage> {
                     Navigator.pop(context, 'Approve');
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => CrashedPage()),
+                      MaterialPageRoute(builder: (context) => parkingLot()),
                     );
                   },
                   child: const Text('Approve'),
@@ -91,11 +93,6 @@ class _HomePageState extends State<HomePage> {
       }
     });
   }
-  // @override
-  // void initState() {
-  //   super.initState();
-  //
-  // }
 
   @override
   void initState() {
@@ -113,6 +110,19 @@ class _HomePageState extends State<HomePage> {
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
             title: Text('HOME'),
+            // actions: <Widget>[
+            //   IconButton(
+            //     icon: Icon(Icons.directions_car_filled),
+            //     onPressed: () {
+            //       if (isPresent) {
+            //         Navigator.push(
+            //           context,
+            //           MaterialPageRoute(builder: (context) => parkingLot()),
+            //         );
+            //       }
+            //     },
+            //   ),
+            // ],
             backgroundColor: Colors.black38,
           ),
           drawer: Drawer(
