@@ -196,27 +196,63 @@ class _SignInState extends State<SignIn> {
                             await _auth.createUserWithEmailAndPassword(
                                 email: email, password: password);
                         if (newUser != null) {
-                          final User? user = FirebaseAuth.instance.currentUser;
-                          final String? uid = user?.uid;
-                          await FirebaseFirestore.instance
-                              .collection('users')
-                              .doc(uid)
-                              .set({
-                            'numberPlate': plate,
-                            'email': email,
-                            'entry': false
-                          });
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => HomePage(),
+                          final user = FirebaseAuth.instance.currentUser;
+                          await user?.sendEmailVerification();
+                          if (user != null && !user.emailVerified) {
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: Text('Verify'),
+                                content: Text('Please verify your email'),
+                                actions: <Widget>[
+                                  TextButton(
+                                    onPressed: () =>
+                                        Navigator.pop(context, 'OK'),
+                                    child: const Text('OK'),
+                                  ),
+                                ],
+                              ),
+                            );
+                          } else {
+                            await FirebaseFirestore.instance
+                                .collection('users')
+                                .doc(user!.uid)
+                                .set({
+                              'numberPlate': plate,
+                              'email': email,
+                              'entry': false,
+                              'count': 0
+                            });
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => HomePage(),
+                              ),
+                            );
+                          }
+                        }
+                      } on FirebaseAuthException catch (e) {
+                        if (e.code == 'email-already-in-use') {
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: Text('Email already in use'),
+                              content: Text(
+                                  'The email address is already in use by another account.'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: Text('OK'),
+                                ),
+                              ],
                             ),
                           );
                         }
                       } catch (e) {
-                        print("--------------------------\n$e");
+                        print(e);
                       }
                     },
+
                     child: Text(
                       ' SIGN IN ',
                       style: TextStyle(

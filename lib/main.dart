@@ -103,7 +103,7 @@ class HomePage extends StatelessWidget {
                             );
                           },
                           child: Text(
-                            'Already have an account?Sign in',
+                            'Already have an account?Log in',
                             style: TextStyle(color: Colors.blueGrey),
                           ))
                     ], //
