@@ -1,6 +1,6 @@
 # SLOTLOT
 
-A new Flutter project.
+Parking made swiftier.
 
 ## Getting Started
 
