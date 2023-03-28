@@ -110,8 +110,6 @@ class _parkingLotState extends State<parkingLot> {
     _carNumber = widget.carNumber;
     super.initState();
     getAvailableSlot();
-    // getCount();
-    // initializeData();
   }
 
   @override
@@ -119,15 +117,6 @@ class _parkingLotState extends State<parkingLot> {
     super.didChangeDependencies();
     getAvailableSlot();
   }
-
-  // Future<void> initializeData() async {
-  //   await getCount();
-  //   // print("initial count: $_count");
-  //   // if (_count == 1) {
-  //     print("condition passed!");
-  //     getAvailableSlot();
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
