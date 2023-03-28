@@ -10,6 +10,7 @@ import 'package:http/http.dart' as http;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 
 class HomePage extends StatefulWidget {
   //const ({Key? key}) : super(key: key);
@@ -20,11 +21,13 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final _auth = FirebaseAuth.instance;
-  List<String> parkingLots = ['bennett university', 'dlf centeral parking'];
-  TextEditingController searchController = TextEditingController();
+  late int count;
+  // List<String> parkingLots = ['bennett university', 'dlf centeral parking'];
+  // TextEditingController searchController = TextEditingController();
 
   User? loggedInUser;
   late String carNumber = "";
+  late String? userID = "";
   late bool isPresent = false;
 
   void getCurrentUser() async {
@@ -42,12 +45,8 @@ class _HomePageState extends State<HomePage> {
         final String newCarNumber = data['numberPlate'];
         print(newCarNumber);
         setState(() {
-          // Update the state of the widget with the new value of carNumber.
           carNumber = newCarNumber;
         });
-        // final Map<String, dynamic> data =
-        //     snapshot.data() as Map<String, dynamic>;
-        // final String carNumber = data[numberPlate];
       }
     } catch (e) {
       print(e);
@@ -61,34 +60,60 @@ class _HomePageState extends State<HomePage> {
     print(loggedInUser?.email);
 
     final String? uid = user?.uid;
-
+    setState(() {
+      userID = uid;
+    });
     _db.collection('users').doc(uid).snapshots().listen((docSnapshot) {
       if (docSnapshot.exists) {
         isPresent = docSnapshot.get('entry');
+        count = docSnapshot.get('count');
+        print(isPresent);
+
         if (isPresent) {
-          showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: Text('Attention'),
-              content: Text('Your entry has been detected'),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () => Navigator.pop(context, 'Not me!'),
-                  child: const Text('Not me!'),
-                ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(context, 'Approve');
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => parkingLot()),
-                    );
-                  },
-                  child: const Text('Approve'),
-                ),
-              ],
-            ),
-          );
+          if (count == 0) {
+            count++;
+            // DatabaseReference ref = FirebaseDatabase.instance.ref("users/123");
+            // FirebaseFirestore firestore = FirebaseFirestore.instance;
+            // DocumentReference documentReference =
+            //     firestore.collection('users').doc('uid');
+            // print(uid);
+            // documentReference.get().then((doc) {
+            //   if (doc.exists) {
+            //     documentReference.update({
+            //       'count': count,
+            //     });
+            //   } else {
+            //     print('Document does not exist!');
+            //   }
+            // });
+            print("Hi! im homepage count $count");
+
+            showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                title: Text('Attention'),
+                content: Text('Your entry has been detected'),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () => Navigator.pop(context, 'Not me!'),
+                    child: const Text('Not me!'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context, 'Approve');
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                parkingLot(userID, carNumber)),
+                      );
+                    },
+                    child: const Text('Approve'),
+                  ),
+                ],
+              ),
+            );
+          }
         }
       }
     });
@@ -96,7 +121,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getCurrentUser();
     setupPresenceListener();
@@ -110,19 +134,20 @@ class _HomePageState extends State<HomePage> {
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
             title: Text('HOME'),
-            // actions: <Widget>[
-            //   IconButton(
-            //     icon: Icon(Icons.directions_car_filled),
-            //     onPressed: () {
-            //       if (isPresent) {
-            //         Navigator.push(
-            //           context,
-            //           MaterialPageRoute(builder: (context) => parkingLot()),
-            //         );
-            //       }
-            //     },
-            //   ),
-            // ],
+            actions: <Widget>[
+              IconButton(
+                icon: Icon(Icons.directions_car_filled),
+                onPressed: () {
+                  if (isPresent) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => parkingLot(userID, carNumber)),
+                    );
+                  }
+                },
+              ),
+            ],
             backgroundColor: Colors.black38,
           ),
           drawer: Drawer(

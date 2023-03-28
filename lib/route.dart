@@ -6,22 +6,52 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'homepage.dart';
 
 class parkingLot extends StatefulWidget {
-  const parkingLot({Key? key}) : super(key: key);
+  // const parkingLot({Key? key}) : super(key: key);
+
+  final String? uid;
+  final String? carNumber;
+  // final int count;
+
+  parkingLot(this.uid, this.carNumber);
 
   @override
   State<parkingLot> createState() => _parkingLotState();
 }
 
 class _parkingLotState extends State<parkingLot> {
+  String _uid = "";
+  String? _carNumber = "";
+  late int _count;
+
   DocumentSnapshot? AvailableSlot;
   String slotID = "Null";
+
+  // Future<void> getCount() async {
+  //   final FirebaseFirestore _db = await FirebaseFirestore.instance;
+  //   // int count = 0;
+  //   _db.collection('users').doc(_uid).snapshots().listen((docSnapshot) {
+  //     if (docSnapshot.exists) {
+  //       _count = docSnapshot.get('count');
+  //       // _count = count;
+  //       print("getCount1: $_count");
+  //       if (_count == 1) {
+  //         print("condition passed!");
+  //         getAvailableSlot();
+  //         updateCount();
+  //       }
+  //     }
+  //   });
+  // }
+
   Future<void> getAvailableSlot() async {
+    print("Function called!");
     final snapshot = await FirebaseFirestore.instance
         .collection('bennett')
         .where('available', isEqualTo: true)
         .limit(1)
         .get();
     print(snapshot.docs.first);
+    print(_carNumber);
 
     if (snapshot.docs.isNotEmpty) {
       setState(() {
@@ -34,21 +64,70 @@ class _parkingLotState extends State<parkingLot> {
     final documentReference =
         FirebaseFirestore.instance.collection('bennett').doc(documentId);
 //------------
+    final FirebaseFirestore _db = FirebaseFirestore.instance;
+    _db.collection('users').doc(_uid).snapshots().listen((docSnapshot) async {
+      if (docSnapshot.exists) {
+        bool isPresent = docSnapshot.get('entry');
+        if (isPresent) {
+          documentReference.update({
+            'assigned': _carNumber,
+            'available': false,
+          });
+        } // else {
+        //   documentReference.update({
+        //     'assigned': 0,
+        //     'available': true,
+        //   });
+        // }
+      }
 
-    //-------------
-    await documentReference.update({
-      //   'assigned': ,
-      'available': false,
-      //   // Add more fields to update here
+      // print("later count: $_count");
     });
-    // print("done");
+    // _count++;
+    // DocumentReference user =
+    //     FirebaseFirestore.instance.collection('users').doc(_uid);
+    //
+    // // Update the 'count' field value to 2 for the specified document
+    // await user.update({'count': _count});
+    //
+    // print('Count updated successfully for user $_uid as $_count');
   }
+
+  // Future<void> updateCount() async {
+  //   _count++;
+  //   DocumentReference user =
+  //       FirebaseFirestore.instance.collection('users').doc(_uid);
+  //
+  //   // Update the 'count' field value to 2 for the specified document
+  //   await user.update({'count': _count});
+  //
+  //   print('Count updated successfully for user $_uid as $_count');
+  // }
 
   @override
   void initState() {
+    _uid = widget.uid ?? "0";
+    _carNumber = widget.carNumber;
     super.initState();
     getAvailableSlot();
+    // getCount();
+    // initializeData();
   }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    getAvailableSlot();
+  }
+
+  // Future<void> initializeData() async {
+  //   await getCount();
+  //   // print("initial count: $_count");
+  //   // if (_count == 1) {
+  //     print("condition passed!");
+  //     getAvailableSlot();
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
