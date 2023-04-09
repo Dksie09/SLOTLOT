@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:trial_all/dlfInfo.dart';
 import 'crashed.dart';
 import 'route.dart';
 import 'dart:math';
 import 'main.dart';
+import 'bennettInfo.dart';
+import 'dlfInfo.dart';
 import 'package:url_launcher/link.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:maps_launcher/maps_launcher.dart';
@@ -310,7 +313,8 @@ class _HomePageState extends State<HomePage> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => CrashedPage()),
+                                          builder: (context) =>
+                                              BennettInfoPage()),
                                     );
                                     // MapsLauncher.launchQuery(
                                     //     'Plot Nos 8-11, TechZone 2, Greater Noida, Uttar Pradesh 201310');
@@ -403,7 +407,7 @@ class _HomePageState extends State<HomePage> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => CrashedPage()),
+                                          builder: (context) => dlfInfoPage()),
                                     );
                                   },
                                   child: Padding(
