@@ -12,11 +12,11 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: HomePage());
+    return MaterialApp(home: HomePage0());
   }
 }
 
-class HomePage extends StatelessWidget {
+class HomePage0 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

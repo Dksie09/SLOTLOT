@@ -96,7 +96,7 @@ class _dlfInfoPageState extends State<dlfInfoPage> {
                   ),
                   SizedBox(height: 10),
                   Text(
-                    'Other Information: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod felis eget arcu molestie, at placerat ipsum elementum.',
+                    'Other Information: This parking is free for 2 hours and chargeble after 2 hours and its free if you have a bill.',
                     style: TextStyle(
                       fontSize: 16,
                       color: Colors.white,
@@ -117,31 +117,20 @@ class _dlfInfoPageState extends State<dlfInfoPage> {
             SizedBox(height: 20),
             SizedBox(height: 20),
             SizedBox(height: 20),
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.all(10.0),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(10.0),
-                  topRight: Radius.circular(10.0),
-                  bottomLeft: Radius.circular(10.0),
-                  bottomRight: Radius.circular(10.0),
+            MaterialButton(
+              onPressed: () {},
+              color: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: Text(
+                'Slots Available',
+                style: TextStyle(
+                  color: Colors.black,
                 ),
               ),
-              child: FlatButton(
-                onPressed: () {
-                  // Add your book now button logic here
-                },
-                child: Text(
-                  'BOOKINGS OPEN',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18.0,
-                  ),
-                ),
-              ),
-            ),
+            )
           ],
         ),
       ),

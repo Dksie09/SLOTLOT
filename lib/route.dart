@@ -132,41 +132,46 @@ class _parkingLotState extends State<parkingLot> {
           ),
         ),
         backgroundColor: Colors.black,
-        body: SafeArea(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              // SizedBox(height: 10),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-                child: Text(
-                  "You have been assigned:",
-                  style: TextStyle(
-                      fontFamily: "Pacifico",
-                      fontSize: 30,
-                      color: Colors.white),
-                ),
-              ),
-              // SizedBox(height: 10),
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  color: Colors.orangeAccent,
-                ),
-                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 8),
-                child: Text(
-                  "$slotID",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 30,
+        body: SingleChildScrollView(
+          child: SafeArea(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                // SizedBox(height: 10),
+                // Padding(
+                //   padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+                //   child: Text(
+                //     "Park at this spot  :",
+                //     style: TextStyle(
+                //         // fontFamily: "Pacifico",
+                //         fontSize: 30,
+                //         color: Colors.white),
+                //   ),
+                // ),
+                // SizedBox(height: 10),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      color: Colors.deepOrange,
+                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 95, vertical: 8),
+                    child: Text(
+                      "Assigned: $slotID",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 30,
+                      ),
+                    ),
                   ),
                 ),
-              ),
-              // SizedBox(height: 30),
-              Image(image: AssetImage('images/lots/$slotID.png')),
-              SizedBox(height: 10),
-            ],
+                // SizedBox(height: 30),
+                Image(image: AssetImage('images/lots/$slotID.jpg')),
+                SizedBox(height: 10),
+              ],
+            ),
           ),
         ),
       ),
