@@ -2,6 +2,9 @@
 
 Parking made swiftier.
 
+<img src="https://github.com/Dksie09/SLOTLOT/assets/91268240/d619dcc6-3435-414b-ba0a-9e65b8f22971" width="300">
+
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
